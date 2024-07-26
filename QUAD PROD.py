@@ -73,10 +73,10 @@ async def play(interaction: discord.Interaction, link_track : str):
     print(caption, url_youtube.author)
     embed = discord.Embed(
         title=caption,
-        description=url_youtube.author,
+        description='Подождите воспроизведения трека',
     )
     await interaction.response.send_message(embed=embed)
-
+    #await interaction.response.send_message('Пожалуйста, подождите немного', delete_after=5)
     my_itag = url_youtube.streams.filter(only_audio=True)[-1].itag
     mus = url_youtube.streams.get_by_itag(my_itag)
     hash = str(int(hashlib.sha1(link_track.encode("utf-8")).hexdigest(), 16) % (10 ** 8)) # its a name in directory
@@ -357,4 +357,4 @@ async def on_message(message):
             await member.unban()
 
 
-client.run('MTI1Nzc0OTIyODk4MjM3MDM0NA.GTTKnS.UY2__wmOFG2rE_8nvv_v8w8xB6Q9NX80bTT0dQ')
+client.run('MTI1Nzc0OTIyODk4MjM3MDM0NA.GhWVQT.a9oiMwFco8vfjl9nTa2Ea6-AnZ3KJO74CT68kY')
