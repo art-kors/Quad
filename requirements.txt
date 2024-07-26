@@ -1,0 +1,7 @@
+discord.py
+pymorphy2
+PyQT5
+flask
+requests
+gTTS
+playsound==1.2.2
