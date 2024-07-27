@@ -15,6 +15,8 @@ from fnmatch import *
 from pytube.innertube import _default_clients
 from collections import deque
 import asyncio
+from speech import *
+from gtts import gTTS
 import sqlite3
 
 _default_clients["ANDROID_MUSIC"] = _default_clients["ANDROID_CREATOR"]
@@ -157,7 +159,12 @@ async def translate(interaction: discord.Interaction, text: str, from_: str, to:
             json_response = response.json()
             res = json_response["matches"][0]["translation"]
             print(res)
-    await interaction.response.send_message(res)
+    from_audio = gTTS(text, lang=from_)
+    to_audio = gTTS(res, lang=to)
+    from_audio.save(f'./googleTTS/{text}.mp3')
+    to_audio.save(f'./googleTTS/{res}.mp3')
+    await interaction.response.send_message(res, files=[discord.File(f'./googleTTS/{text}.mp3'), discord.File(f'./googleTTS/{res}.mp3')])
+
 
 
 @client.tree.command(name='rus_to_kalmyk')
@@ -171,9 +178,11 @@ async def rtk(interaction: discord.Interaction, text: str):
             key = i
             break
     print('key:', key)
+    if '(у мальчиков)' in key and text == 'мальчик':
+        key = 'парень, юноша, молодой человек'
     ans = base[key]
-    await interaction.response.send_message(ans)
-
+    kalmyk_speech = text_to_voice(ans, str(int(hashlib.sha1(ans.encode("utf-16")).hexdigest(), 16) % (10 ** 8)))
+    await interaction.response.send_message(ans, file=discord.File(kalmyk_speech[0]))
 
 @client.tree.command(name='kalmyk_to_rus')
 async def ktr(interaction: discord.Interaction, text: str):
@@ -357,4 +366,4 @@ async def on_message(message):
             await member.unban()
 
 
-client.run('MTI1Nzc0OTIyODk4MjM3MDM0NA.GhWVQT.a9oiMwFco8vfjl9nTa2Ea6-AnZ3KJO74CT68kY')
+client.run('MTI1Nzc0OTIyODk4MjM3MDM0NA.G-RTXC.WoIIcUDnC0BkePmP499wxGHT24M5y7W-wNyCnc')
