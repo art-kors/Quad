@@ -5,3 +5,5 @@ flask
 requests
 gTTS
 playsound==1.2.2
+torch
+numpy==1.26.4
